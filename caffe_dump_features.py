@@ -73,7 +73,14 @@ def load_float_image(filename):
             (H x W x 3) in RGB or
             (H x W x 1) in grayscale
     """
-    return skimage.img_as_float(skimage.io.imread(filename)).astype(np.float32)
+
+    im = skimage.img_as_float(skimage.io.imread(filename)).astype(np.float32)
+    if (len(im.shape) == 2):
+        im = im[:, :, np.newaxis]
+    if (im.shape[-1] == 1):
+        im = np.concatenate((im, im, im), axis=2)
+    return im
+
 
 def load_net_transformer():
     """Loads a Caffenet and transformer."""
